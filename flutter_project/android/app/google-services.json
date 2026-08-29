@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "704400446551",
+    "project_id": "canto-do-baby",
+    "storage_bucket": "canto-do-baby.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:704400446551:android:5b1ed6afbf84be10757f12",
+        "android_client_info": {
+          "package_name": "com.example.flutter_project"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBevfcp7qhpYVr2JP6sfy5DU1kfiH21tEQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
