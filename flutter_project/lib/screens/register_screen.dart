@@ -165,6 +165,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             : const Text('Cadastrar', style: TextStyle(color: Colors.white, fontSize: 18)),
                       ),
                     ),
+                    TextButton(
+                      child: const Text('Já possui uma conta? Faça login', style: TextStyle(color: Color(0xFF6B8E99))),
+                      onPressed: () => Navigator.pushNamed(context, '/login'),
+                    ),
+
                   ],
                 ),
               ),
