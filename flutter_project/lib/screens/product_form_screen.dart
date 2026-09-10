@@ -1,11 +1,9 @@
 // lib/screens/product_form_screen.dart
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-
 import '../models/product.dart';
 import '../service/product_service.dart';
 import '../utils/formatters.dart';
-
 import 'package:intl/intl.dart';
 
 class ProductFormScreen extends StatefulWidget {
@@ -27,7 +25,7 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
   late TextEditingController _priceCtrl;
   late TextEditingController _qtyCtrl;
   late TextEditingController _phoneCtrl;
-  late TextEditingController _imageCtrl; // NOVO CONTROLADOR
+  late TextEditingController _imageCtrl;
   bool _isAvailable = true;
   bool _isLoading = false;
 
@@ -49,7 +47,7 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
     _qtyCtrl = TextEditingController(text: p?.quantity.toString() ?? '');
     _imageCtrl = TextEditingController(
       text: p?.imageUrl ?? '',
-    ); // INICIALIZANDO O CONTROLADOR
+    );
     _isAvailable = p?.isAvailable ?? true;
   }
 
@@ -61,7 +59,7 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
     _priceCtrl.dispose();
     _qtyCtrl.dispose();
     _phoneCtrl.dispose();
-    _imageCtrl.dispose(); // DESCARTANDO O CONTROLADOR
+    _imageCtrl.dispose();
     super.dispose();
   }
 
@@ -90,7 +88,7 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
           quantity: int.tryParse(_qtyCtrl.text.trim()) ?? 0,
           imageUrl: _imageCtrl.text.trim().isEmpty
               ? null
-              : _imageCtrl.text.trim(), // SALVANDO A IMAGEM
+              : _imageCtrl.text.trim(),
         );
 
         await _productService.saveProduct(product);
@@ -211,7 +209,7 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
               SwitchListTile(
                 title: const Text('Disponível em Estoque'),
                 value: _isAvailable,
-                activeColor: Colors.pink.shade300,
+                activeThumbColor: Colors.pink.shade300,
                 onChanged: (bool value) {
                   setState(() => _isAvailable = value);
                 },

@@ -117,10 +117,12 @@ class _HomeScreenState extends State<HomeScreen> {
                     prefixIcon: Icon(Icons.phone),
                   ),
                   validator: (v) {
-                    if (v == null || v.trim().isEmpty)
+                    if (v == null || v.trim().isEmpty){
                       return 'Informe o telefone';
-                    if (v.length < 14)
+                    }
+                    if (v.length < 14) {
                       return 'Telefone incompleto'; // Validação extra
+                    }
                     return null;
                   },
                 ),

@@ -152,9 +152,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         prefixIcon: Icon(Icons.phone),
                       ),
                       validator: (v) {
-                        if (v == null || v.isEmpty) return 'Informe o telefone';
-                        if (v.replaceAll(RegExp(r'\D'), '').length < 10)
+                        if (v == null || v.isEmpty){ 
+                          return 'Informe o telefone';
+                        }
+                        if (v.replaceAll(RegExp(r'\D'), '').length < 10){
                           return 'Telefone incompleto';
+                          }
                         return null;
                       },
                     ),
@@ -168,11 +171,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         prefixIcon: Icon(Icons.email),
                       ),
                       validator: (v) {
-                        if (v == null || v.trim().isEmpty)
+                        if (v == null || v.trim().isEmpty){
                           return 'Informe o e-mail';
+                        }
                         if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$')
-                            .hasMatch(v))
+                            .hasMatch(v)) {
                           return 'E-mail inválido';
+                        }
                         return null;
                       },
                     ),
