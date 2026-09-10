@@ -12,11 +12,7 @@ class UserModel {
   });
 
   Map<String, dynamic> toMap() {
-    return {
-      'name': name,
-      'email': email,
-      'phone': phone,
-    };
+    return {'name': name, 'email': email, 'phone': phone};
   }
 
   // Recebe o mapa e o ID do documento

@@ -35,11 +35,14 @@ class _LoginScreenState extends State<LoginScreen> {
         }
       } on FirebaseAuthException catch (e) {
         String message = 'Ocorreu um erro ao fazer login.';
-        if (e.code == 'user-not-found' || e.code == 'wrong-password' || e.code == 'invalid-credential') {
+        if (e.code == 'user-not-found' ||
+            e.code == 'wrong-password' ||
+            e.code == 'invalid-credential') {
           message = 'E-mail ou senha incorretos.';
         }
         if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message)));
+          ScaffoldMessenger.of(context)
+              .showSnackBar(SnackBar(content: Text(message)));
         }
       } finally {
         if (mounted) setState(() => _isLoading = false);
@@ -71,7 +74,11 @@ class _LoginScreenState extends State<LoginScreen> {
                     const SizedBox(height: 20),
                     const Text(
                       'Login',
-                      style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold, color: Color(0xFF6B8E99)),
+                      style: TextStyle(
+                        fontSize: 28,
+                        fontWeight: FontWeight.bold,
+                        color: Color(0xFF6B8E99),
+                      ),
                     ),
                     const SizedBox(height: 30),
                     TextFormField(
@@ -83,8 +90,10 @@ class _LoginScreenState extends State<LoginScreen> {
                         prefixIcon: Icon(Icons.email),
                       ),
                       validator: (value) {
-                        if (value == null || value.trim().isEmpty) return 'Informe o e-mail';
-                        if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(value)) {
+                        if (value == null || value.trim().isEmpty)
+                          return 'Informe o e-mail';
+                        if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$')
+                            .hasMatch(value)) {
                           return 'Insira um e-mail válido';
                         }
                         return null;
@@ -100,7 +109,8 @@ class _LoginScreenState extends State<LoginScreen> {
                         prefixIcon: Icon(Icons.lock),
                       ),
                       validator: (value) {
-                        if (value == null || value.isEmpty) return 'Informe a senha';
+                        if (value == null || value.isEmpty)
+                          return 'Informe a senha';
                         return null;
                       },
                     ),
@@ -109,16 +119,30 @@ class _LoginScreenState extends State<LoginScreen> {
                       width: double.infinity,
                       height: 50,
                       child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(backgroundColor: Colors.pink.shade300),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.pink.shade300,
+                        ),
                         onPressed: _isLoading ? null : _submit,
                         child: _isLoading
-                            ? const CircularProgressIndicator(color: Colors.white)
-                            : const Text('Entrar', style: TextStyle(color: Colors.white, fontSize: 18)),
+                            ? const CircularProgressIndicator(
+                                color: Colors.white,
+                              )
+                            : const Text(
+                                'Entrar',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 18,
+                                ),
+                              ),
                       ),
                     ),
                     TextButton(
-                      onPressed: () => Navigator.pushNamed(context, '/register'),
-                      child: const Text('Não tem uma conta? Cadastre-se', style: TextStyle(color: Color(0xFF6B8E99))),
+                      onPressed: () =>
+                          Navigator.pushNamed(context, '/register'),
+                      child: const Text(
+                        'Não tem uma conta? Cadastre-se!',
+                        style: TextStyle(color: Color(0xFF6B8E99)),
+                      ),
                     ),
                   ],
                 ),

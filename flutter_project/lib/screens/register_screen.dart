@@ -5,7 +5,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class PhoneInputFormatter extends TextInputFormatter {
   @override
-  TextEditingValue formatEditUpdate(TextEditingValue oldValue, TextEditingValue newValue) {
+  TextEditingValue formatEditUpdate(
+    TextEditingValue oldValue,
+    TextEditingValue newValue,
+  ) {
     final text = newValue.text.replaceAll(RegExp(r'\D'), '');
     final buffer = StringBuffer();
 
@@ -54,18 +57,22 @@ class _RegisterScreenState extends State<RegisterScreen> {
       setState(() => _isLoading = true);
       try {
         // 1. Cria a conta de autenticação
-        UserCredential userCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
-          email: _emailController.text.trim(),
-          password: _passwordController.text.trim(),
-        );
+        UserCredential userCredential = await FirebaseAuth.instance
+            .createUserWithEmailAndPassword(
+              email: _emailController.text.trim(),
+              password: _passwordController.text.trim(),
+            );
 
         // 2. Grava Nome e Telefone no Cloud Firestore
-        await FirebaseFirestore.instance.collection('users').doc(userCredential.user!.uid).set({
-          'name': _nameController.text.trim(),
-          'phone': _phoneController.text.trim(),
-          'email': _emailController.text.trim(),
-          'createdAt': FieldValue.serverTimestamp(),
-        });
+        await FirebaseFirestore.instance
+            .collection('users')
+            .doc(userCredential.user!.uid)
+            .set({
+              'name': _nameController.text.trim(),
+              'phone': _phoneController.text.trim(),
+              'email': _emailController.text.trim(),
+              'createdAt': FieldValue.serverTimestamp(),
+            });
 
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
@@ -81,13 +88,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
           message = 'A senha fornecida é muito fraca.';
         }
         if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message)));
+          ScaffoldMessenger.of(context)
+              .showSnackBar(SnackBar(content: Text(message)));
         }
       } catch (e) {
         if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Erro de banco de dados: $e')),
-          );
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(SnackBar(content: Text('Erro de banco de dados: $e')));
         }
       } finally {
         if (mounted) setState(() => _isLoading = false);
@@ -120,18 +128,33 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   children: [
                     TextFormField(
                       controller: _nameController,
-                      decoration: const InputDecoration(labelText: 'Nome', border: OutlineInputBorder(), prefixIcon: Icon(Icons.person)),
-                      validator: (v) => (v == null || v.trim().isEmpty) ? 'Informe o nome' : null,
+                      decoration: const InputDecoration(
+                        labelText: 'Nome',
+                        border: OutlineInputBorder(),
+                        prefixIcon: Icon(Icons.person),
+                      ),
+                      validator: (v) => (v == null || v.trim().isEmpty)
+                          ? 'Informe o nome'
+                          : null,
                     ),
                     const SizedBox(height: 16),
                     TextFormField(
                       controller: _phoneController,
                       keyboardType: TextInputType.phone,
-                      inputFormatters: [FilteringTextInputFormatter.digitsOnly, PhoneInputFormatter()],
-                      decoration: const InputDecoration(labelText: 'Telefone', hintText: '(00) 00000-0000', border: OutlineInputBorder(), prefixIcon: Icon(Icons.phone)),
+                      inputFormatters: [
+                        FilteringTextInputFormatter.digitsOnly,
+                        PhoneInputFormatter(),
+                      ],
+                      decoration: const InputDecoration(
+                        labelText: 'Telefone',
+                        hintText: '(00) 00000-0000',
+                        border: OutlineInputBorder(),
+                        prefixIcon: Icon(Icons.phone),
+                      ),
                       validator: (v) {
                         if (v == null || v.isEmpty) return 'Informe o telefone';
-                        if (v.replaceAll(RegExp(r'\D'), '').length < 10) return 'Telefone incompleto';
+                        if (v.replaceAll(RegExp(r'\D'), '').length < 10)
+                          return 'Telefone incompleto';
                         return null;
                       },
                     ),
@@ -139,10 +162,17 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     TextFormField(
                       controller: _emailController,
                       keyboardType: TextInputType.emailAddress,
-                      decoration: const InputDecoration(labelText: 'E-mail', border: OutlineInputBorder(), prefixIcon: Icon(Icons.email)),
+                      decoration: const InputDecoration(
+                        labelText: 'E-mail',
+                        border: OutlineInputBorder(),
+                        prefixIcon: Icon(Icons.email),
+                      ),
                       validator: (v) {
-                        if (v == null || v.trim().isEmpty) return 'Informe o e-mail';
-                        if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(v)) return 'E-mail inválido';
+                        if (v == null || v.trim().isEmpty)
+                          return 'Informe o e-mail';
+                        if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$')
+                            .hasMatch(v))
+                          return 'E-mail inválido';
                         return null;
                       },
                     ),
@@ -150,26 +180,44 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     TextFormField(
                       controller: _passwordController,
                       obscureText: true,
-                      decoration: const InputDecoration(labelText: 'Senha', border: OutlineInputBorder(), prefixIcon: Icon(Icons.lock)),
-                      validator: (v) => (v == null || v.length < 6) ? 'A senha deve ter no mínimo 6 caracteres' : null,
+                      decoration: const InputDecoration(
+                        labelText: 'Senha',
+                        border: OutlineInputBorder(),
+                        prefixIcon: Icon(Icons.lock),
+                      ),
+                      validator: (v) => (v == null || v.length < 6)
+                          ? 'A senha deve ter no mínimo 6 caracteres'
+                          : null,
                     ),
                     const SizedBox(height: 24),
                     SizedBox(
                       width: double.infinity,
                       height: 50,
                       child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(backgroundColor: Colors.pink.shade300),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.pink.shade300,
+                        ),
                         onPressed: _isLoading ? null : _submit,
                         child: _isLoading
-                            ? const CircularProgressIndicator(color: Colors.white)
-                            : const Text('Cadastrar', style: TextStyle(color: Colors.white, fontSize: 18)),
+                            ? const CircularProgressIndicator(
+                                color: Colors.white,
+                              )
+                            : const Text(
+                                'Cadastrar',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 18,
+                                ),
+                              ),
                       ),
                     ),
                     TextButton(
-                      child: const Text('Já possui uma conta? Faça login', style: TextStyle(color: Color(0xFF6B8E99))),
+                      child: const Text(
+                        'Já possui uma conta? Faça login',
+                        style: TextStyle(color: Color(0xFF6B8E99)),
+                      ),
                       onPressed: () => Navigator.pushNamed(context, '/login'),
                     ),
-
                   ],
                 ),
               ),

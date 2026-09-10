@@ -1,6 +1,9 @@
+import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+
+import '../utils/formatters.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -36,9 +39,9 @@ class _HomeScreenState extends State<HomeScreen> {
         }
       } catch (e) {
         if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Erro ao carregar dados: $e')),
-          );
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(SnackBar(content: Text('Erro ao carregar dados: $e')));
         }
       }
     }
@@ -50,10 +53,7 @@ class _HomeScreenState extends State<HomeScreen> {
         await FirebaseFirestore.instance
             .collection('users')
             .doc(currentUser!.uid)
-            .update({
-          'name': newName,
-          'phone': newPhone,
-        });
+            .update({'name': newName, 'phone': newPhone});
 
         setState(() {
           userData!['name'] = newName;
@@ -68,9 +68,8 @@ class _HomeScreenState extends State<HomeScreen> {
         }
       } catch (e) {
         if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Erro ao atualizar: $e')),
-          );
+          ScaffoldMessenger.of(context)
+              .showSnackBar(SnackBar(content: Text('Erro ao atualizar: $e')));
         }
       }
     }
@@ -85,7 +84,10 @@ class _HomeScreenState extends State<HomeScreen> {
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: const Text('Editar Perfil', style: TextStyle(color: Color(0xFF6B8E99))),
+          title: const Text(
+            'Editar Perfil',
+            style: TextStyle(color: Color(0xFF6B8E99)),
+          ),
           content: Form(
             key: formKey,
             child: Column(
@@ -93,15 +95,34 @@ class _HomeScreenState extends State<HomeScreen> {
               children: [
                 TextFormField(
                   controller: nameController,
-                  decoration: const InputDecoration(labelText: 'Nome', border: OutlineInputBorder()),
-                  validator: (v) => (v == null || v.trim().isEmpty) ? 'Informe o nome' : null,
+                  decoration: const InputDecoration(
+                    labelText: 'Nome',
+                    border: OutlineInputBorder(),
+                  ),
+                  validator: (v) =>
+                      (v == null || v.trim().isEmpty) ? 'Informe o nome' : null,
                 ),
                 const SizedBox(height: 16),
                 TextFormField(
                   controller: phoneController,
                   keyboardType: TextInputType.phone,
-                  decoration: const InputDecoration(labelText: 'Telefone', hintText: '(00) 00000-0000', border: OutlineInputBorder(), prefixIcon: Icon(Icons.phone)),
-                  validator: (v) => (v == null || v.trim().isEmpty) ? 'Informe o telefone' : null,
+                  inputFormatters: [
+                    FilteringTextInputFormatter.digitsOnly,
+                    PhoneInputFormatter(),
+                  ],
+                  decoration: const InputDecoration(
+                    labelText: 'Telefone',
+                    hintText: '(00) 00000-0000',
+                    border: OutlineInputBorder(),
+                    prefixIcon: Icon(Icons.phone),
+                  ),
+                  validator: (v) {
+                    if (v == null || v.trim().isEmpty)
+                      return 'Informe o telefone';
+                    if (v.length < 14)
+                      return 'Telefone incompleto'; // Validação extra
+                    return null;
+                  },
                 ),
               ],
             ),
@@ -109,17 +130,29 @@ class _HomeScreenState extends State<HomeScreen> {
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: const Text('Cancelar', style: TextStyle(color: Colors.grey)),
+              child: const Text(
+                'Cancelar',
+                style: TextStyle(color: Colors.grey),
+              ),
             ),
             ElevatedButton(
-              style: ElevatedButton.styleFrom(backgroundColor: Colors.pink.shade300),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.pink.shade300,
+              ),
               onPressed: () {
                 if (formKey.currentState!.validate()) {
-                  _updateProfile(nameController.text.trim(), phoneController.text.trim());
+                  _updateProfile(
+                    nameController.text.trim(),
+                    phoneController.text.trim(),
+                  );
                 }
               },
-              child: const Text('Salvar', style: TextStyle(color: Colors.white)),
+              child: const Text(
+                'Salvar',
+                style: TextStyle(color: Colors.white),
+              ),
             ),
+            // No arquivo lib/screens/home_screen.dart, adicione após o ElevatedButton.icon de "Editar Perfil":
           ],
         );
       },
@@ -137,7 +170,10 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Meu Dashboard', style: TextStyle(color: Colors.white)),
+        title: const Text(
+          'Meu Dashboard',
+          style: TextStyle(color: Colors.white),
+        ),
         backgroundColor: const Color(0xFF6B8E99),
         actions: [
           IconButton(
@@ -156,7 +192,9 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ),
         child: _isLoading
-            ? const Center(child: CircularProgressIndicator(color: Color(0xFF6B8E99)))
+            ? const Center(
+                child: CircularProgressIndicator(color: Color(0xFF6B8E99)),
+              )
             : SingleChildScrollView(
                 padding: const EdgeInsets.all(24.0),
                 child: Column(
@@ -165,32 +203,83 @@ class _HomeScreenState extends State<HomeScreen> {
                     const CircleAvatar(
                       radius: 50,
                       backgroundColor: Colors.white,
-                      child: Icon(Icons.person, size: 50, color: Color(0xFF6B8E99)),
+                      child: Icon(
+                        Icons.person,
+                        size: 50,
+                        color: Color(0xFF6B8E99),
+                      ),
                     ),
                     const SizedBox(height: 24),
                     Card(
                       elevation: 4,
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(15),
+                      ),
                       child: Padding(
                         padding: const EdgeInsets.all(20.0),
                         child: Column(
                           children: [
                             ListTile(
-                              leading: const Icon(Icons.person_outline, color: Color(0xFF6B8E99)),
-                              title: const Text('Nome', style: TextStyle(fontSize: 14, color: Colors.grey)),
-                              subtitle: Text(userData?['name'] ?? '', style: const TextStyle(fontSize: 18, color: Colors.black87)),
+                              leading: const Icon(
+                                Icons.person_outline,
+                                color: Color(0xFF6B8E99),
+                              ),
+                              title: const Text(
+                                'Nome',
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  color: Colors.grey,
+                                ),
+                              ),
+                              subtitle: Text(
+                                userData?['name'] ?? '',
+                                style: const TextStyle(
+                                  fontSize: 18,
+                                  color: Colors.black87,
+                                ),
+                              ),
                             ),
                             const Divider(),
                             ListTile(
-                              leading: const Icon(Icons.email_outlined, color: Color(0xFF6B8E99)),
-                              title: const Text('E-mail', style: TextStyle(fontSize: 14, color: Colors.grey)),
-                              subtitle: Text(userData?['email'] ?? '', style: const TextStyle(fontSize: 18, color: Colors.black87)),
+                              leading: const Icon(
+                                Icons.email_outlined,
+                                color: Color(0xFF6B8E99),
+                              ),
+                              title: const Text(
+                                'E-mail',
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  color: Colors.grey,
+                                ),
+                              ),
+                              subtitle: Text(
+                                userData?['email'] ?? '',
+                                style: const TextStyle(
+                                  fontSize: 18,
+                                  color: Colors.black87,
+                                ),
+                              ),
                             ),
                             const Divider(),
                             ListTile(
-                              leading: const Icon(Icons.phone_outlined, color: Color(0xFF6B8E99)),
-                              title: const Text('Telefone', style: TextStyle(fontSize: 14, color: Colors.grey)),
-                              subtitle: Text(userData?['phone'] ?? '', style: const TextStyle(fontSize: 18, color: Colors.black87)),
+                              leading: const Icon(
+                                Icons.phone_outlined,
+                                color: Color(0xFF6B8E99),
+                              ),
+                              title: const Text(
+                                'Telefone',
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  color: Colors.grey,
+                                ),
+                              ),
+                              subtitle: Text(
+                                userData?['phone'] ?? '',
+                                style: const TextStyle(
+                                  fontSize: 18,
+                                  color: Colors.black87,
+                                ),
+                              ),
                             ),
                           ],
                         ),
@@ -203,11 +292,39 @@ class _HomeScreenState extends State<HomeScreen> {
                       child: ElevatedButton.icon(
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.pink.shade300,
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
                         ),
                         icon: const Icon(Icons.edit, color: Colors.white),
-                        label: const Text('Editar Perfil', style: TextStyle(color: Colors.white, fontSize: 18)),
+                        label: const Text(
+                          'Editar Perfil',
+                          style: TextStyle(color: Colors.white, fontSize: 18),
+                        ),
                         onPressed: _showEditDialog,
+                      ),
+                    ),
+                    const SizedBox(height: 16), // Espaçamento
+                    SizedBox(
+                      width: double.infinity,
+                      height: 50,
+                      child: ElevatedButton.icon(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: const Color(
+                            0xFF6B8E99,
+                          ), // Cor de destaque secundária
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                        ),
+                        icon: const Icon(Icons.inventory, color: Colors.white),
+                        label: const Text(
+                          'Gerenciar Produtos',
+                          style: TextStyle(color: Colors.white, fontSize: 18),
+                        ),
+                        onPressed: () {
+                          Navigator.pushNamed(context, '/product_list_screen');
+                        },
                       ),
                     ),
                   ],

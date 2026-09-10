@@ -56,7 +56,7 @@ class _SplashScreenState extends State<SplashScreen>
     // Inicia as animações
     _fadeController.forward();
     _scaleController.forward();
-    
+
     // Inicia a pulsação após a animação inicial
     Future.delayed(const Duration(milliseconds: 500), () {
       if (mounted) {
@@ -100,7 +100,11 @@ class _SplashScreenState extends State<SplashScreen>
             children: [
               // Imagem com animações de fade e scale
               AnimatedBuilder(
-                animation: Listenable.merge([_fadeAnimation, _scaleAnimation, _pulseAnimation]),
+                animation: Listenable.merge([
+                  _fadeAnimation,
+                  _scaleAnimation,
+                  _pulseAnimation,
+                ]),
                 builder: (context, child) {
                   return Opacity(
                     opacity: _fadeAnimation.value * _pulseAnimation.value,

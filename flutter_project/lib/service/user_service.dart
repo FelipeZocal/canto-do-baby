@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+
 import '../models/user.dart'; // Garante que UserModel/User do seu projeto seja reconhecido
 
 class UserService {
