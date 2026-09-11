@@ -24,7 +24,6 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
   late TextEditingController _obsCtrl;
   late TextEditingController _priceCtrl;
   late TextEditingController _qtyCtrl;
-  late TextEditingController _phoneCtrl;
   late TextEditingController _imageCtrl;
   bool _isAvailable = true;
   bool _isLoading = false;
@@ -58,7 +57,6 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
     _obsCtrl.dispose();
     _priceCtrl.dispose();
     _qtyCtrl.dispose();
-    _phoneCtrl.dispose();
     _imageCtrl.dispose();
     super.dispose();
   }

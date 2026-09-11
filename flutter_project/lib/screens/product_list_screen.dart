@@ -131,7 +131,8 @@ class _ProductListScreenState extends State<ProductListScreen> {
                         subtitle: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text('Estoque: ${product.quantity} | ${product.date}'),
+                            Text('Estoque: ${product.quantity} unidade(s)   Adicionado em ${product.date}'),
+                            Text('${product.description}'),
                             Text(
                               product.isAvailable ? 'Disponível' : 'Esgotado',
                               style: TextStyle(
