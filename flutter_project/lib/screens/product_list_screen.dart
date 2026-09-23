@@ -132,6 +132,7 @@ class _ProductListScreenState extends State<ProductListScreen> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text('Estoque: ${product.quantity} unidade(s)   Adicionado em ${product.date}'),
+                            // ignore: unnecessary_string_interpolations
                             Text('${product.description}'),
                             Text(
                               product.isAvailable ? 'Disponível' : 'Esgotado',

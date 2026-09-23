@@ -95,76 +95,78 @@ class _SplashScreenState extends State<SplashScreen>
           ),
         ),
         child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              // Imagem com animações de fade e scale
-              AnimatedBuilder(
-                animation: Listenable.merge([
-                  _fadeAnimation,
-                  _scaleAnimation,
-                  _pulseAnimation,
-                ]),
-                builder: (context, child) {
-                  return Opacity(
-                    opacity: _fadeAnimation.value * _pulseAnimation.value,
-                    child: Transform.scale(
-                      scale: _scaleAnimation.value,
-                      child: child,
-                    ),
-                  );
-                },
-                child: Container(
-                  width: 250,
-                  height: 250,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withValues(alpha: 0.1),
-                        blurRadius: 20,
-                        spreadRadius: 5,
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                // Imagem com animações de fade e scale
+                AnimatedBuilder(
+                  animation: Listenable.merge([
+                    _fadeAnimation,
+                    _scaleAnimation,
+                    _pulseAnimation,
+                  ]),
+                  builder: (context, child) {
+                    return Opacity(
+                      opacity: _fadeAnimation.value * _pulseAnimation.value,
+                      child: Transform.scale(
+                        scale: _scaleAnimation.value,
+                        child: child,
                       ),
-                    ],
-                  ),
-                  child: Image.asset(
-                    'assets/images/Canto do Baby.png',
-                    fit: BoxFit.cover,
+                    );
+                  },
+                  child: Container(
+                    width: 250,
+                    height: 250,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withValues(alpha: 0.1),
+                          blurRadius: 20,
+                          spreadRadius: 5,
+                        ),
+                      ],
+                    ),
+                    child: Image.asset(
+                      'assets/images/Canto do Baby.png',
+                      fit: BoxFit.cover,
+                    ),
                   ),
                 ),
-              ),
-              const SizedBox(height: 40),
-              // Indicador de carregamento animado
-              FadeTransition(
-                opacity: _fadeAnimation,
-                child: Column(
-                  children: [
-                    const Text(
-                      'Canto do Baby',
-                      style: TextStyle(
-                        fontSize: 28,
-                        fontWeight: FontWeight.bold,
-                        color: Color(0xFF6B8E99), // Azul médio
+                const SizedBox(height: 40),
+                // Indicador de carregamento animado
+                FadeTransition(
+                  opacity: _fadeAnimation,
+                  child: Column(
+                    children: [
+                      const Text(
+                        'Canto do Baby',
+                        style: TextStyle(
+                          fontSize: 28,
+                          fontWeight: FontWeight.bold,
+                          color: Color(0xFF6B8E99), // Azul médio
+                        ),
                       ),
-                    ),
-                    const SizedBox(height: 20),
-                    SizedBox(
-                      width: 60,
-                      height: 4,
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(2),
-                        child: LinearProgressIndicator(
-                          backgroundColor: Colors.grey.shade300,
-                          valueColor: AlwaysStoppedAnimation<Color>(
-                            Colors.pink.shade300,
+                      const SizedBox(height: 20),
+                      SizedBox(
+                        width: 60,
+                        height: 4,
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(2),
+                          child: LinearProgressIndicator(
+                            backgroundColor: Colors.grey.shade300,
+                            valueColor: AlwaysStoppedAnimation<Color>(
+                              Colors.pink.shade300,
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
