@@ -50,7 +50,7 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
     _isAvailable = p?.isAvailable ?? true;
   }
 
-  @override
+  @override 
   void dispose() {
     _nameCtrl.dispose();
     _descCtrl.dispose();

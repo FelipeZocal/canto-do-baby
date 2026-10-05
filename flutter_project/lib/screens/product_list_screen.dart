@@ -96,9 +96,6 @@ class _ProductListScreenState extends State<ProductListScreen> {
                       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                       child: ListTile(
                         
-                        // ==========================================
-                        // NOVA LÓGICA DA IMAGEM NO LUGAR DOS ÍCONES
-                        // ==========================================
                         leading: (product.imageUrl != null && product.imageUrl!.isNotEmpty)
                             ? ClipRRect(
                                 borderRadius: BorderRadius.circular(8), // Borda levemente arredondada
