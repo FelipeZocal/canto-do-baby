@@ -84,12 +84,15 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
           isAvailable: _isAvailable,
           price: double.tryParse(rawPrice) ?? 0.0,
           quantity: int.tryParse(_qtyCtrl.text.trim()) ?? 0,
-          imageUrl: _imageCtrl.text.trim().isEmpty
-              ? null
-              : _imageCtrl.text.trim(),
+          imageUrl: _imageCtrl.text.trim().isEmpty ? null : _imageCtrl.text.trim(),
         );
 
-        await _productService.saveProduct(product);
+        // AQUI ESTÁ A MUDANÇA: Verifica se é um novo cadastro ou alteração
+        if (widget.product == null) {
+          await _productService.cadastrar(product);
+        } else {
+          await _productService.atualizar(product);
+        }
 
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
@@ -101,7 +104,7 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
               ),
             ),
           );
-          Navigator.pop(context);
+          Navigator.pop(context, true); // Retorna 'true' para sinalizar recarregamento da tela anterior
         }
       } catch (e) {
         if (mounted) {
