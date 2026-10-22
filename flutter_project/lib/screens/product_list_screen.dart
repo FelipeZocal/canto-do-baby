@@ -220,7 +220,6 @@ class _ProductListScreenState extends State<ProductListScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text('Estoque: ${product.quantity} unidade(s)   Adicionado em ${product.date}'),
-                Text(product.description),
                 Text(
                   product.isAvailable ? 'Disponível' : 'Esgotado',
                   style: TextStyle(
@@ -231,6 +230,42 @@ class _ProductListScreenState extends State<ProductListScreen> {
                 ),
               ],
             ),
+            // ADICIONE O ONTAP AQUI PARA ATENDER O REQUISITO "consultarPorId()"
+            onTap: () async {
+              try {
+                // Demonstra o uso do consultarPorId exigido na avaliação
+                final detalhes = await _productService.consultarPorId(product.id!);
+                if (mounted) {
+                  showDialog(
+                    context: context,
+                    builder: (ctx) => AlertDialog(
+                      title: Text(detalhes.name),
+                      content: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text('Descrição: ${detalhes.description}'),
+                          Text('Preço: R\$ ${detalhes.price.toStringAsFixed(2)}'),
+                          Text('Quantidade: ${detalhes.quantity}'),
+                          Text('Data: ${detalhes.date} às ${detalhes.time}'),
+                          Text('Obs: ${detalhes.observation}'),
+                        ],
+                      ),
+                      actions: [
+                        TextButton(
+                          onPressed: () => Navigator.pop(ctx),
+                          child: const Text('Fechar'),
+                        ),
+                      ],
+                    ),
+                  );
+                }
+              } catch (e) {
+                if (mounted) {
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Erro ao buscar detalhes: $e')));
+                }
+              }
+            },
             trailing: Row(
               mainAxisSize: MainAxisSize.min,
               children: [

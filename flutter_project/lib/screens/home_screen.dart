@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+import 'fornecedor_list_screen.dart';
+
 import '../utils/formatters.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -117,7 +119,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     prefixIcon: Icon(Icons.phone),
                   ),
                   validator: (v) {
-                    if (v == null || v.trim().isEmpty){
+                    if (v == null || v.trim().isEmpty) {
                       return 'Informe o telefone';
                     }
                     if (v.length < 14) {
@@ -326,6 +328,35 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                         onPressed: () {
                           Navigator.pushNamed(context, '/product_list_screen');
+                        },
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    SizedBox(
+                      width: double.infinity,
+                      height: 50,
+                      child: ElevatedButton.icon(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: const Color(0xFF6B8E99),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                        ),
+                        icon: const Icon(
+                          Icons.local_shipping,
+                          color: Colors.white,
+                        ),
+                        label: const Text(
+                          'Gerenciar Fornecedores',
+                          style: TextStyle(color: Colors.white, fontSize: 18),
+                        ),
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => const FornecedorListScreen(),
+                            ),
+                          );
                         },
                       ),
                     ),
