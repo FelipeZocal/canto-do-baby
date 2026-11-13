@@ -79,7 +79,6 @@ class _CartScreenState extends State<CartScreen> {
     );
 
     try {
-      // Chama o MockAPI e limpa o Firestore
       await _cartService.finalizarPedido();
       
       if (mounted) Navigator.pop(context); // Fecha o loading circular

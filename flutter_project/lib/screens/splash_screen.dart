@@ -89,8 +89,8 @@ class _SplashScreenState extends State<SplashScreen>
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
             colors: [
-              Color(0xFFE8F4F8), // Azul claro
-              Color(0xFFFFF0F5), // Rosa claro
+              Color(0xFFE8F4F8),
+              Color(0xFFFFF0F5),
             ],
           ),
         ),
@@ -99,7 +99,7 @@ class _SplashScreenState extends State<SplashScreen>
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                // Imagem com animações de fade e scale
+                
                 AnimatedBuilder(
                   animation: Listenable.merge([
                     _fadeAnimation,
@@ -135,7 +135,7 @@ class _SplashScreenState extends State<SplashScreen>
                   ),
                 ),
                 const SizedBox(height: 40),
-                // Indicador de carregamento animado
+                
                 FadeTransition(
                   opacity: _fadeAnimation,
                   child: Column(

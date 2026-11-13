@@ -134,7 +134,6 @@ class CartService extends ChangeNotifier {
     notifyListeners();
   }
 
-  // --- MOCKAPI: ENVIAR PEDIDO FINALIZADO ---
   Future<void> finalizarPedido() async {
     if (_items.isEmpty) throw Exception("O carrinho está vazio");
     final userId = FirebaseAuth.instance.currentUser?.uid;
@@ -151,7 +150,6 @@ class CartService extends ChangeNotifier {
     };
 
     try {
-      // Envia para a sua URL do MockAPI na tabela pedidos
       final url = 'https://6ad60d62f71f154ac486615f.mockapi.io/api/v1/carrinho';
       final response = await http.post(
         Uri.parse(url),
@@ -160,7 +158,6 @@ class CartService extends ChangeNotifier {
       );
 
       if (response.statusCode == 201 || response.statusCode == 200) {
-        // Sucesso! Limpa o carrinho local e apaga o carrinho do Firestore
         _clearCartLocal();
         if (_userCartRef != null) {
           await _userCartRef!.delete();

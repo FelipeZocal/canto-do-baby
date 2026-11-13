@@ -270,7 +270,7 @@ class _ProductListScreenState extends State<ProductListScreen> {
                 ),
               ],
             ),
-            // AÇÃO DO CLIQUE NO PRODUTO: Mostra os detalhes (exigência da avaliação)
+
             onTap: () async {
               try {
                 final detalhes = await _productService.consultarPorId(product.id!);
@@ -308,12 +308,12 @@ class _ProductListScreenState extends State<ProductListScreen> {
             trailing: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                // 1. BOTÃO DE ADICIONAR AO CARRINHO (NOVO)
+                
                 IconButton(
                   icon: const Icon(Icons.add_shopping_cart, color: Colors.green),
                   onPressed: () => _confirmAddToCart(product),
                 ),
-                // 2. BOTÃO DE EDITAR PRODUTO
+                                
                 IconButton(
                   icon: const Icon(Icons.edit, color: Color(0xFF6B8E99)),
                   onPressed: () async {
@@ -324,7 +324,7 @@ class _ProductListScreenState extends State<ProductListScreen> {
                     if (result == true) _loadInitialData();
                   },
                 ),
-                // 3. BOTÃO DE DELETAR PRODUTO
+                
                 IconButton(
                   icon: const Icon(Icons.delete, color: Colors.red),
                   onPressed: () => _confirmDelete(product.id!),

@@ -124,7 +124,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       return 'Informe o telefone';
                     }
                     if (v.length < 14) {
-                      return 'Telefone incompleto'; // Validação extra
+                      return 'Telefone incompleto';
                     }
                     return null;
                   },
@@ -157,7 +157,6 @@ class _HomeScreenState extends State<HomeScreen> {
                 style: TextStyle(color: Colors.white),
               ),
             ),
-            // No arquivo lib/screens/home_screen.dart, adicione após o ElevatedButton.icon de "Editar Perfil":
           ],
         );
       },

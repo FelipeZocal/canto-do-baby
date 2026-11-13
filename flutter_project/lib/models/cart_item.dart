@@ -21,7 +21,6 @@ class CartItemModel {
     };
   }
 
-  // Cria um item a partir dos dados do Firestore
   factory CartItemModel.fromMap(Map<String, dynamic> map) {
     return CartItemModel(
       product: ProductModel.fromMap(map['product'], map['product']['id'] ?? ''),
