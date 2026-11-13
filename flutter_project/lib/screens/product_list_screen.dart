@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 import '../models/product.dart';
 import '../service/product_service.dart';
+import '../service/cart_service.dart'; // Import do serviço do carrinho
 import 'product_form_screen.dart';
+import 'cart_screen.dart'; // Import da tela do carrinho
 
 class ProductListScreen extends StatefulWidget {
   const ProductListScreen({super.key});
@@ -11,12 +13,10 @@ class ProductListScreen extends StatefulWidget {
   State<ProductListScreen> createState() => _ProductListScreenState();
 }
 
-
 class _ProductListScreenState extends State<ProductListScreen> {
   final ProductService _productService = ProductService();
   String _searchQuery = '';
   
-  // Variáveis para controlar o estado manualmente em vez do FutureBuilder
   List<ProductModel> _products = [];
   bool _isLoading = true;
   String? _errorMessage;
@@ -28,7 +28,6 @@ class _ProductListScreenState extends State<ProductListScreen> {
     super.initState();
     _loadInitialData();
     
-    // Configura o Polling: Executa a consulta silenciosa a cada 5 segundos
     _timer = Timer.periodic(const Duration(seconds: 5), (timer) {
       _loadDataSilently();
     });
@@ -36,11 +35,10 @@ class _ProductListScreenState extends State<ProductListScreen> {
 
   @override
   void dispose() {
-    _timer?.cancel(); // MUITO IMPORTANTE: Cancela o timer ao sair do ecrã para poupar memória
+    _timer?.cancel();
     super.dispose();
   }
 
-  // Carregamento inicial (mostra a rodinha de loading)
   Future<void> _loadInitialData() async {
     setState(() {
       _isLoading = true;
@@ -64,7 +62,6 @@ class _ProductListScreenState extends State<ProductListScreen> {
     }
   }
 
-  // Carregamento em segundo plano (atualiza os dados sem mostrar loading na interface)
   Future<void> _loadDataSilently() async {
     try {
       final data = await _productService.listarTodos();
@@ -74,7 +71,7 @@ class _ProductListScreenState extends State<ProductListScreen> {
         });
       }
     } catch (e) {
-      // Ignoramos erros no carregamento silencioso para não incomodar o utilizador com pop-ups a cada 5 segundos
+      // Ignora erro silencioso
     }
   }
 
@@ -99,7 +96,7 @@ class _ProductListScreenState extends State<ProductListScreen> {
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(content: Text('Produto excluído com sucesso!')),
                   );
-                  _loadInitialData(); // Atualiza a lista imediatamente
+                  _loadInitialData();
                 }
               } catch (e) {
                 if (mounted) {
@@ -115,6 +112,38 @@ class _ProductListScreenState extends State<ProductListScreen> {
       ),
     );
   }
+  void _confirmAddToCart(ProductModel product) {
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: const Text('Adicionar ao Carrinho', style: TextStyle(color: Color(0xFF6B8E99))),
+        content: Text('Deseja adicionar "${product.name}" ao seu carrinho?'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx),
+            child: const Text('Cancelar', style: TextStyle(color: Colors.grey)),
+          ),
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(backgroundColor: Colors.green),
+            onPressed: () {
+              Navigator.pop(ctx); // Fecha o modal
+              CartService().addItem(product); // Adiciona ao carrinho
+              if (mounted) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text('${product.name} adicionado ao carrinho!'),
+                    backgroundColor: Colors.green,
+                    duration: const Duration(seconds: 2),
+                  ),
+                );
+              }
+            },
+            child: const Text('Adicionar', style: TextStyle(color: Colors.white)),
+          ),
+        ],
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -123,6 +152,18 @@ class _ProductListScreenState extends State<ProductListScreen> {
         title: const Text('Produtos', style: TextStyle(color: Colors.white)),
         backgroundColor: const Color(0xFF6B8E99),
         iconTheme: const IconThemeData(color: Colors.white),
+        actions: [
+          // BOTÃO NOVO: Abre a tela do carrinho
+          IconButton(
+            icon: const Icon(Icons.shopping_cart),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => const CartScreen()),
+              );
+            },
+          ),
+        ],
       ),
       body: Column(
         children: [
@@ -166,7 +207,6 @@ class _ProductListScreenState extends State<ProductListScreen> {
     );
   }
 
-  // Extraímos a construção da lista para um método separado para manter o código limpo
   Widget _buildContent() {
     if (_isLoading) {
       return const Center(child: CircularProgressIndicator());
@@ -230,10 +270,9 @@ class _ProductListScreenState extends State<ProductListScreen> {
                 ),
               ],
             ),
-            // ADICIONE O ONTAP AQUI PARA ATENDER O REQUISITO "consultarPorId()"
+            // AÇÃO DO CLIQUE NO PRODUTO: Mostra os detalhes (exigência da avaliação)
             onTap: () async {
               try {
-                // Demonstra o uso do consultarPorId exigido na avaliação
                 final detalhes = await _productService.consultarPorId(product.id!);
                 if (mounted) {
                   showDialog(
@@ -269,6 +308,12 @@ class _ProductListScreenState extends State<ProductListScreen> {
             trailing: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
+                // 1. BOTÃO DE ADICIONAR AO CARRINHO (NOVO)
+                IconButton(
+                  icon: const Icon(Icons.add_shopping_cart, color: Colors.green),
+                  onPressed: () => _confirmAddToCart(product),
+                ),
+                // 2. BOTÃO DE EDITAR PRODUTO
                 IconButton(
                   icon: const Icon(Icons.edit, color: Color(0xFF6B8E99)),
                   onPressed: () async {
@@ -279,10 +324,13 @@ class _ProductListScreenState extends State<ProductListScreen> {
                     if (result == true) _loadInitialData();
                   },
                 ),
+                // 3. BOTÃO DE DELETAR PRODUTO
                 IconButton(
                   icon: const Icon(Icons.delete, color: Colors.red),
                   onPressed: () => _confirmDelete(product.id!),
+                  
                 ),
+                
               ],
             ),
           ),

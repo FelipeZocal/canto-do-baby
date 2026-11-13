@@ -60,4 +60,27 @@ class CnpjInputFormatter extends TextInputFormatter {
   }
 }
 
+class CepInputFormatter extends TextInputFormatter {
+  @override
+  TextEditingValue formatEditUpdate(
+    TextEditingValue oldValue,
+    TextEditingValue newValue,
+  ) {
+    final text = newValue.text.replaceAll(RegExp(r'\D'), '');
+    final buffer = StringBuffer();
+    
+    if (text.length > 8) return oldValue;
+    
+    for (int i = 0; i < text.length; i++) {
+      if (i == 5) buffer.write('-');
+      buffer.write(text[i]);
+    }
+    
+    return TextEditingValue(
+      text: buffer.toString(),
+      selection: TextSelection.collapsed(offset: buffer.length),
+    );
+  }
+}
+
 

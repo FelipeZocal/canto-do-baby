@@ -85,6 +85,7 @@ class _FornecedorFormScreenState extends State<FornecedorFormScreen> {
                 decoration: const InputDecoration(labelText: 'Nome', border: OutlineInputBorder()),
                 validator: (v) => v!.isEmpty ? 'Campo obrigatório' : null,
               ),
+
               const SizedBox(height: 16),
               TextFormField(
                 controller: _cnpjCtrl,
@@ -93,6 +94,7 @@ class _FornecedorFormScreenState extends State<FornecedorFormScreen> {
                 decoration: const InputDecoration(labelText: 'CNPJ', border: OutlineInputBorder()),
                 validator: (v) => v!.length < 18 ? 'CNPJ inválido' : null,
               ),
+              
               const SizedBox(height: 16),
               TextFormField(
                 controller: _telCtrl,
@@ -101,6 +103,7 @@ class _FornecedorFormScreenState extends State<FornecedorFormScreen> {
                 decoration: const InputDecoration(labelText: 'Telefone', border: OutlineInputBorder()),
                 validator: (v) => v!.isEmpty ? 'Campo obrigatório' : null,
               ),
+
               const SizedBox(height: 16),
               TextFormField(
                 controller: _emailCtrl,
@@ -108,12 +111,13 @@ class _FornecedorFormScreenState extends State<FornecedorFormScreen> {
                 decoration: const InputDecoration(labelText: 'E-mail', border: OutlineInputBorder()),
                 validator: (v) => !v!.contains('@') ? 'Dados inválidos' : null,
               ),
+
               const SizedBox(height: 16),
               TextFormField(
                 controller: _imgCtrl,
                 decoration: const InputDecoration(labelText: 'URL da Imagem', border: OutlineInputBorder(), prefixIcon: Icon(Icons.image)),
-                validator: (v) => v!.isEmpty ? 'Campo obrigatório' : null,
               ),
+
               const SizedBox(height: 24),
               SizedBox(
                 width: double.infinity, height: 50,
