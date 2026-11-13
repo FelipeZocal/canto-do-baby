@@ -3,7 +3,7 @@ import 'package:http/http.dart' as http;
 import '../models/fornecedor.dart';
 
 class FornecedorService {
-  // Crie um endpoint "fornecedores" no MockAPI.io e cole a URL aqui
+  
   final String baseUrl = 'https://6ad60d62f71f154ac486615f.mockapi.io/api/v1/fornecedores';
 
   Future<void> cadastrar(FornecedorModel fornecedor) async {

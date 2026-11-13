@@ -87,7 +87,6 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
           imageUrl: _imageCtrl.text.trim().isEmpty ? null : _imageCtrl.text.trim(),
         );
 
-        // AQUI ESTÁ A MUDANÇA: Verifica se é um novo cadastro ou alteração
         if (widget.product == null) {
           await _productService.cadastrar(product);
         } else {
@@ -104,7 +103,7 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
               ),
             ),
           );
-          Navigator.pop(context, true); // Retorna 'true' para sinalizar recarregamento da tela anterior
+          Navigator.pop(context, true);
         }
       } catch (e) {
         if (mounted) {
