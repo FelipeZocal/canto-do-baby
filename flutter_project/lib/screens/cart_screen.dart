@@ -70,8 +70,8 @@ class _CartScreenState extends State<CartScreen> {
 
   Future<void> _checkout() async {
     if (_cartService.items.isEmpty) return;
-    
-    // Mostra o loading para o usuário não clicar duas vezes
+
+    // Mostra o loading no centro da tela
     showDialog(
       context: context,
       barrierDismissible: false,
@@ -79,34 +79,101 @@ class _CartScreenState extends State<CartScreen> {
     );
 
     try {
+      // Chama o MockAPI e limpa o Firestore
       await _cartService.finalizarPedido();
-      
+
       if (mounted) Navigator.pop(context); // Fecha o loading circular
-      
+
       if (mounted) {
-        showDialog(
+        showGeneralDialog(
           context: context,
-          builder: (ctx) => AlertDialog(
-            title: const Text('Pedido Finalizado', style: TextStyle(color: Color(0xFF6B8E99))),
-            content: const Text('Seu pedido foi processado e enviado com sucesso!'),
-            actions: [
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(backgroundColor: Colors.pink.shade300),
-                onPressed: () {
-                  Navigator.pop(ctx); // Fecha o modal
-                  Navigator.pop(context); // Volta para a tela de produtos
-                },
-                child: const Text('OK', style: TextStyle(color: Colors.white)),
+          barrierColor: Colors.transparent, // Fundo invisível
+          transitionDuration: const Duration(milliseconds: 400),
+          pageBuilder: (ctx, anim1, anim2) {
+            return Align(
+              alignment: Alignment.topCenter,
+              child: SafeArea(
+                child: Material(
+                  color: Colors.transparent,
+                  child: Container(
+                    margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                    padding: const EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                      color: Colors.white, 
+                      borderRadius: BorderRadius.circular(20),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.15),
+                          blurRadius: 20,
+                          offset: const Offset(0, 5),
+                        ),
+                      ],
+                    ),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.max,
+                      children: [
+                        // Ícone do App
+                        Container(
+                          width: 40,
+                          height: 40,
+                          decoration: BoxDecoration(
+                            color: Colors.pink,
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: const Icon(Icons.child_care, color: Colors.white, size: 26),
+                        ),
+                        const SizedBox(width: 12),
+                        // Textos da notificação
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisSize: MainAxisSize.min,
+                            children: const [
+                              Text(
+                                'Canto do Baby',
+                                style: TextStyle(color: Colors.black87, fontWeight: FontWeight.bold, fontSize: 14),
+                              ),
+                              SizedBox(height: 2),
+                              Text(
+                                'Pedido finalizado com sucesso!',
+                                style: TextStyle(color: Colors.black87, fontSize: 14),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
               ),
-            ],
-          ),
+            );
+          },
+          transitionBuilder: (ctx, anim1, anim2, child) {
+            // Animação de deslizar suavemente de fora da tela para dentro
+            return SlideTransition(
+              position: Tween(begin: const Offset(0, -1), end: const Offset(0, 0))
+                  .animate(CurvedAnimation(parent: anim1, curve: Curves.easeOutCubic)),
+              child: child,
+            );
+          },
         );
+
+        // 2. TEMPORIZADOR PARA FECHAR A NOTIFICAÇÃO
+        await Future.delayed(const Duration(seconds: 3));
+        if (mounted) {
+          Navigator.pop(context); // Recolhe a notificação para cima
+          Navigator.pop(context); // Volta o usuário para a lista de produtos
+        }
       }
     } catch (e) {
-      if (mounted) Navigator.pop(context); // Fecha o loading circular
+      if (mounted) Navigator.pop(context);
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(e.toString().replaceAll('Exception: ', '')), backgroundColor: Colors.red),
+          SnackBar(
+            content: Text(e.toString().replaceAll('Exception: ', '')),
+            backgroundColor: Colors.red,
+          ),
         );
       }
     }
