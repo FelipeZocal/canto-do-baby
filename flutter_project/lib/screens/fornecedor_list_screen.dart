@@ -96,7 +96,7 @@ class _FornecedorListScreenState extends State<FornecedorListScreen> {
                           child: ListTile(
                             leading: ClipRRect(
                               borderRadius: BorderRadius.circular(8),
-                              child: Image.network(f.imageUrl, width: 50, height: 50, fit: BoxFit.cover, errorBuilder: (_, __, ___) => const Icon(Icons.business)),
+                              child: Image.network(f.imageUrl, width: 50, height: 50, fit: BoxFit.cover, errorBuilder: (_, _, _) => const Icon(Icons.business)),
                             ),
                             title: Text(f.nome, style: const TextStyle(fontWeight: FontWeight.bold)),
                             subtitle: Text('CNPJ: ${f.cnpj}\nE-mail: ${f.email}'),

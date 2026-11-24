@@ -39,7 +39,7 @@ class CartService extends ChangeNotifier {
     return FirebaseFirestore.instance.collection('users').doc(userId).collection('cart').doc('active_cart');
   }
 
-  // --- MÉTODOS DO FIRESTORE ---
+  // --- FIRESTORE ---
 
   Future<void> _loadCartFromFirestore(String uid) async {
     // 1. ESVAZIA A MEMÓRIA LOCAL PRIMEIRO (Garante que um usuário não veja o do outro)

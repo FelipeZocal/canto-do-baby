@@ -103,7 +103,7 @@ class _CartScreenState extends State<CartScreen> {
                       borderRadius: BorderRadius.circular(20),
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.black.withOpacity(0.15),
+                          color: Colors.black.withValues(alpha: 0.15),
                           blurRadius: 20,
                           offset: const Offset(0, 5),
                         ),
@@ -216,7 +216,7 @@ class _CartScreenState extends State<CartScreen> {
                                     child: Image.network(
                                       item.product.imageUrl!,
                                       width: 60, height: 60, fit: BoxFit.cover,
-                                      errorBuilder: (_, __, ___) => _buildPlaceholder(),
+                                      errorBuilder: (_, _, _) => _buildPlaceholder(),
                                     ),
                                   )
                                 : _buildPlaceholder(),
@@ -275,7 +275,7 @@ class _CartScreenState extends State<CartScreen> {
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
         color: Colors.white,
-        boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.05), offset: const Offset(0, -5), blurRadius: 10)],
+        boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.05), offset: const Offset(0, -5), blurRadius: 10)],
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
